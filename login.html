@@ -1,0 +1,55 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="assets/style.css" />
+  <title>Login</title>
+</head>
+<body>
+  <div class="scene">
+    <div class="card">
+      <div class="inner">
+        <h1>Login</h1>
+        <p>Enter credentials, then OTP will be sent.</p>
+
+        <div class="field">
+          <label>Email</label>
+          <input id="email" type="email" placeholder="you@email.com" />
+        </div>
+        <div class="field">
+          <label>Password</label>
+          <input id="password" type="password" placeholder="••••••••" />
+        </div>
+
+        <button class="btn" id="btn">Login & Send OTP</button>
+        <div class="toast" id="toast"></div>
+
+        <p class="small" style="margin-top:12px;">
+          New user? <a class="link" href="register.html">Register</a>
+        </p>
+      </div>
+    </div>
+  </div>
+
+<script>
+const toast = (m)=>{ const t=document.getElementById('toast'); t.textContent=m; t.className="toast show"; };
+document.getElementById('btn').onclick = async () => {
+  const body = {
+    email: document.getElementById('email').value.trim(),
+    password: document.getElementById('password').value
+  };
+  if(!body.email || !body.password) return toast("Fill all fields.");
+
+  const r = await fetch("/.netlify/functions/login", { method:"POST", body: JSON.stringify(body) });
+  const data = await r.json().catch(()=>null);
+
+  if(!r.ok) return toast((data && data.error) ? data.error : "Login failed");
+  // store token for demo
+  localStorage.setItem("tempToken", data.tempToken);
+  toast("OTP sent ✅ (Check email).");
+  setTimeout(()=>location.href="otp.html", 800);
+};
+</script>
+</body>
+</html>

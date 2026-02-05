@@ -1,0 +1,55 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="assets/style.css" />
+  <title>Register</title>
+</head>
+<body>
+  <div class="scene">
+    <div class="card">
+      <div class="inner">
+        <h1>Register</h1>
+        <p>Create your account (password will be hashed on backend).</p>
+
+        <div class="field">
+          <label>Name</label>
+          <input id="name" placeholder="Your name" />
+        </div>
+        <div class="field">
+          <label>Email</label>
+          <input id="email" type="email" placeholder="you@email.com" />
+        </div>
+        <div class="field">
+          <label>Password</label>
+          <input id="password" type="password" placeholder="••••••••" />
+        </div>
+
+        <button class="btn" id="btn">Register</button>
+        <div class="toast" id="toast"></div>
+
+        <p class="small" style="margin-top:12px;">
+          Already have an account? <a class="link" href="login.html">Login</a>
+        </p>
+      </div>
+    </div>
+  </div>
+
+<script>
+const toast = (m)=>{ const t=document.getElementById('toast'); t.textContent=m; t.className="toast show"; };
+document.getElementById('btn').onclick = async () => {
+  const body = {
+    name: document.getElementById('name').value.trim(),
+    email: document.getElementById('email').value.trim(),
+    password: document.getElementById('password').value
+  };
+  if(!body.name || !body.email || !body.password) return toast("Fill all fields.");
+  const r = await fetch("/.netlify/functions/register", { method:"POST", body: JSON.stringify(body) });
+  const txt = await r.text();
+  if(r.ok){ toast("Registered ✅ Now login."); setTimeout(()=>location.href="login.html", 900); }
+  else toast(txt);
+};
+</script>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="assets/style.css" />
+  <title>Dashboard</title>
+</head>
+<body>
+  <div class="scene">
+    <div class="card">
+      <div class="inner">
+        <h1>Dashboard ✅</h1>
+        <p id="msg">Checking session…</p>
+
+        <button class="btn" id="logout">Logout</button>
+      </div>
+    </div>
+  </div>
+
+<script>
+const token = localStorage.getItem("authToken");
+const msg = document.getElementById("msg");
+if(!token){
+  msg.textContent = "Not logged in. Redirecting…";
+  setTimeout(()=>location.href="login.html", 700);
+}else{
+  msg.textContent = "You are logged in (demo token stored).";
+}
+document.getElementById("logout").onclick = ()=>{
+  localStorage.removeItem("authToken");
+  location.href="login.html";
+};
+</script>
+</body>
+</html>
